@@ -3,6 +3,8 @@
 
 using namespace std;
 
+extern double alpha, beta, Q, rho;
+
 class Ant
 {
     public:
@@ -18,5 +20,5 @@ class Ant
     void updatePheromone();
     double pathLength();
 
-    static void evaporatePheromone(double);
+    static void evaporatePheromone();
 };
