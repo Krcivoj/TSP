@@ -42,15 +42,29 @@ int main() {
     vector<City> bestPath;
     double bestLength = INT_MAX;
     
-    string fileName = "../Oliver30.csv";
-    //string fileName = "../4x4grid.csv";
-    int max_iterations = 2500;
+    string fileName;
+    int max_iterations;
+    /*fileName = "../4x4grid.csv";
+    fileName = "../4x4grid.csv";
+    max_iterations = 2500;
     alpha = 1;
     beta = 5;
     Q = 100;
-    rho = 0.5;
+    rho = 0.5;*/
+    cout<<"fileName= ";
+    cin>>fileName;
+    cout<<"max_iterations= ";
+    cin>>max_iterations;
+    cout<<"alpha= ";
+    cin>>alpha;
+    cout<<"beta= ";
+    cin>>beta;
+    cout<<"Q= ";
+    cin>>Q;
+    cout<<"rho= ";
+    cin>>rho;
 
-    ifstream infile(fileName);   
+    ifstream infile("../" + fileName);   
     string line;
     while(getline(infile, line)) 
     {
