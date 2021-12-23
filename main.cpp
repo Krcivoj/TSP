@@ -94,7 +94,7 @@ int main() {
         ants.clear();
         for (auto city : Ant::cities)
             ants.push_back(Ant(city));
-        for( int j = 0; j < Ant::cities.size(); j++)
+        for( int j = 0; j < Ant::cities.size() - 1; j++)
         {
             for( auto& ant : ants)
             {

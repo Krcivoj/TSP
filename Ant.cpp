@@ -29,6 +29,7 @@ void Ant::next(){
         }
     }
     double p = ((double) rand() / (RAND_MAX));
+    p *= sum;
     for (auto city : cities){
         if (find(visited.begin(), visited.end(), city) == visited.end()) {
             int i, j;
@@ -39,14 +40,14 @@ void Ant::next(){
                     j = k;
             }
             if(i < j)swap(i,j);
-            p -= (pow(pheromone[i][j],alpha) * pow(1 / d(visited.back(),city),beta))
-                / sum;
-            if(p < 0){
+            p -= (pow(pheromone[i][j],alpha) * pow(1 / d(visited.back(),city),beta));
+            if(p <= 0){
                 visited.push_back(city);
-                break;
+                return;
             }
         }
     }
+    throw runtime_error("Next node not selected");
 }
 
 void Ant::updatePheromone(){
