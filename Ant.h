@@ -1,9 +1,10 @@
+#pragma once
 #include "City.h"
 #include <vector>
 
 using namespace std;
 
-extern double alpha, beta, Q, rho;
+extern double alpha, beta_, Q, rho;
 
 class Ant
 {

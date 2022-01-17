@@ -2,10 +2,11 @@
 #include "City.h"
 #include <cmath>
 #include<iostream>
+#include <algorithm>
 
 using namespace  std;
 
-double alpha, beta, Q, rho;
+double alpha, beta_, Q, rho;
 
 Ant::Ant(){}
 
@@ -25,11 +26,13 @@ void Ant::next(){
                     j = k;
             }
             if(i < j)swap(i,j);
-            sum += pow(pheromone[i][j],alpha) * pow(1 / d(visited.back(),city),beta);
+            sum += pow(pheromone[i][j],alpha) * pow(1 / d(visited.back(),city), beta_);
         }
     }
     double p = ((double) rand() / (RAND_MAX));
+    double p2 = p;
     p *= sum;
+    double sum2 = 0;
     for (auto city : cities){
         if (find(visited.begin(), visited.end(), city) == visited.end()) {
             int i, j;
@@ -40,8 +43,8 @@ void Ant::next(){
                     j = k;
             }
             if(i < j)swap(i,j);
-            p -= (pow(pheromone[i][j],alpha) * pow(1 / d(visited.back(),city),beta));
-            if(p <= 0){
+            sum2 += (pow(pheromone[i][j],alpha) * pow(1 / d(visited.back(),city), beta_));
+            if(p - sum2 <= 0){
                 visited.push_back(city);
                 return;
             }
