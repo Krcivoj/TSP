@@ -99,7 +99,7 @@ void MainWindow::loadClicked()
 
     QString fileName = QFileDialog::getOpenFileName(this, "OpenFile", ".", tr("CSV (*.csv)"), &selfilter);
     if(fileName == ""){
-       qDebug() << "Canceled.";
+       //qDebug() << "Canceled.";
     }
     else{
         file.setFileName(fileName);
@@ -195,7 +195,7 @@ void MainWindow::TSP()
         qApp->processEvents();
         update();
 
-        qDebug() << i;
+        //qDebug() << i;
         ants.clear();
         for (auto city : Ant::cities)
             ants.push_back(Ant(city));
@@ -221,7 +221,7 @@ void MainWindow::TSP()
         }
     }
 
-    qDebug() << bestLength;
+    //qDebug() << bestLength;
 
     //za sad cu tu bacit drawing bestPatha da je ne moram slati kroz emit
     double coef;

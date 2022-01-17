@@ -297,7 +297,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Difference:</string>
+     <string>Accuracy:</string>
     </property>
    </widget>
    <widget class="QLabel" name="accuracy">
