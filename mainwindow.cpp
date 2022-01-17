@@ -127,7 +127,7 @@ void MainWindow::loadClicked()
                 double coef;
                 if(ui->bigChoice->checkState() == Qt::Checked) coef = 0.12;
                 else coef = 10;
-                scene->addEllipse( (double) val1*coef-10, (double) val2*coef-10, 15, 15, QPen(Qt::blue), QBrush(Qt::SolidPattern));
+                scene->addEllipse( (double) val1*coef-10, (double) val2*coef-10, 15, 15, QPen(Qt::green), QBrush(Qt::green));
             }
         }
 
@@ -230,27 +230,27 @@ void MainWindow::TSP()
             if(ui->bigChoice->checkState() == Qt::Checked) coef = 0.12;
             else coef = 10;
             QLineF l = QLineF(i->x*coef, i->y*coef, next(i,1)->x*coef, next(i,1)->y*coef);
-            QPen p = QPen(Qt::blue,Qt::RoundCap);
+            QPen p = QPen(Qt::green,Qt::RoundCap);
             p.setWidthF(3);
             scene->addLine(l,p);
             scene->addEllipse(i->x*coef-10, i->y*coef-10, 15, 15,
-                              QPen(Qt::blue), QBrush(Qt::SolidPattern));
+                              QPen(Qt::green), QBrush(Qt::green));
             scene->addEllipse(next(i,1)->x*coef-10, next(i,1)->y*coef-10, 15, 15,
-                              QPen(Qt::blue), QBrush(Qt::SolidPattern));
+                              QPen(Qt::green), QBrush(Qt::green));
         }
     //zatvaram ciklus
     if(ui->bigChoice->checkState() == Qt::Checked) coef = 0.12;
     else coef = 10;
     QLineF l = QLineF(bestPath.begin()->x*coef, bestPath.begin()->y*coef,
                       next(bestPath.end(),-1)->x*coef, next(bestPath.end(),-1)->y*coef);
-    QPen p = QPen(Qt::blue,Qt::RoundCap);
+    QPen p = QPen(Qt::green,Qt::RoundCap);
     p.setWidthF(3);
     scene->addLine(l,p);
     scene->update();
     scene->addEllipse(bestPath.begin()->x*coef-10, bestPath.begin()->y*coef-10, 15, 15,
-                      QPen(Qt::blue), QBrush(Qt::SolidPattern));
+                      QPen(Qt::green), QBrush(Qt::green));
     scene->addEllipse(next(bestPath.end(),-1)->x*coef-10, next(bestPath.end(),-1)->y*coef-10, 15, 15,
-                      QPen(Qt::blue), QBrush(Qt::SolidPattern));
+                      QPen(Qt::green), QBrush(Qt::green));
 
 
     ui->graphArea->repaint();
@@ -280,9 +280,9 @@ void MainWindow::drawingPath()
                 scene->addLine(l,p);
             }
             scene->addEllipse(Ant::cities[i].x*coef-10, Ant::cities[i].y*coef-10, 15, 15,
-                              QPen(Qt::blue), QBrush(Qt::SolidPattern));
+                              QPen(Qt::green), QBrush(Qt::green));
             scene->addEllipse(Ant::cities[j].x*coef-10, Ant::cities[j].y*coef-10, 15, 15,
-                              QPen(Qt::blue), QBrush(Qt::SolidPattern));
+                              QPen(Qt::green), QBrush(Qt::green));
         }
 
     scene->update();
