@@ -121,8 +121,8 @@ void MainWindow::loadClicked()
                 ui->bestKnown->setText(podaci[1]);
             }
             else {
-                val1 = podaci[0].toInt();
-                val2 = podaci[1].toInt();
+                val1 = podaci[0].toDouble();
+                val2 = podaci[1].toDouble();
                 Ant::cities.push_back( City(val1, val2));
                 double coef;
                 if(ui->bigChoice->checkState() == Qt::Checked) coef = 0.12;
