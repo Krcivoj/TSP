@@ -6,7 +6,8 @@
 #include <vector>
 #include <fstream>
 #include <sstream>
-#include<string>
+#include <string>
+#include <cfloat>
 
 #include<QDebug>
 
@@ -90,6 +91,7 @@ void MainWindow::setupSignalsAndSlots()
 {
     connect(ui->load, &QPushButton::clicked, this, &MainWindow::loadClicked);
     connect(ui->solve, &QPushButton::clicked, this, &MainWindow::solveClicked);
+    connect(ui->manyTest, &QPushButton::clicked, this, &MainWindow::TSP_many);
     connect(this, SIGNAL(drawPath()), this, SLOT(drawingPath()));
 }
 
@@ -160,7 +162,7 @@ void MainWindow::solveClicked()
    ui->load->setEnabled(true);
 }
 
-void MainWindow::TSP()
+pair<double, vector<City>> MainWindow::TSP()
 {
     Ant::pheromone.clear();
 
@@ -169,7 +171,7 @@ void MainWindow::TSP()
 
     vector<Ant> ants;
     vector<City> bestPath;
-    double bestLength = INT_MAX;
+    double bestLength = DBL_MAX;
     int max_iterations =  ui->max_iterations_param->value();
     alpha = ui->alpha_param->value();
     beta_ = ui->beta_param->value();
@@ -261,6 +263,54 @@ void MainWindow::TSP()
     float acc = (ui->bestKnown->text().toFloat() < bestLength) ?
                 ui->bestKnown->text().toFloat()/bestLength : bestLength/ ui->bestKnown->text().toFloat();
     ui->accuracy->setText(QString::number(acc));
+    return pair(bestLength, bestPath);
+}
+
+void MainWindow::TSP_many()
+{
+    int N = 10;
+    double bestLength = DBL_MAX;
+    double sum = 0;
+    vector<City> bestPath;
+    QString name = file.fileName();
+    name = name.split("/").back();
+    QFile outFile;
+
+    QString selfilter = tr("TXT (*.txt)");
+
+    QString fileName = QFileDialog::getSaveFileName(this, "Save as file", ".", selfilter, &selfilter);
+    if(fileName == ""){
+       return;
+    }
+    outFile.setFileName(fileName);
+    if (!outFile.open(QIODevice::WriteOnly | QIODevice::Text))
+            return;
+
+    QTextStream out(&outFile);
+    out << name << '\n';
+    out << "iterations: " << ui->max_iterations_param->value() <<'\n';
+    out << "alpha: " << ui->alpha_param->value() << '\n';
+    out << "beta: " << ui->beta_param->value() << '\n';
+    out << "Q: " << ui->Q_param->value() << '\n';
+    out << "rho " << ui->rho_param->value() << '\n';
+
+    for(int i = 0; i < N; i++)
+    {
+        pair<double, vector<City>> p = TSP();
+        out << p.first << '\n';
+        sum += p.first;
+        if(p.first < bestLength)
+        {
+            bestLength = p.first;
+            bestPath = p.second;
+        }
+
+    }
+    out << "Best found: " << bestLength << '\n';
+    out << "Average: "<< sum/N << '\n';
+    out << "Best known: "<< ui->bestKnown->text();
+
+    outFile.close();
 }
 
 void MainWindow::drawingPath()

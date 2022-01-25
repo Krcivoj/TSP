@@ -1,0 +1,19 @@
+4x4grid.csv
+iterations: 2500
+alpha: 1
+beta: 5
+Q: 100
+rho 0.5
+160
+160
+160
+160
+160
+160
+160
+160
+160
+160
+Best found: 160
+Average: 160
+Best known: 160

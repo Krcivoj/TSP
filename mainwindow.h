@@ -6,6 +6,9 @@
 #include <QMainWindow>
 #include <QProgressBar>
 
+#include <City.h>
+#include <vector>
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -33,6 +36,7 @@ private:
     QFile file;
     QGraphicsScene *scene;
 
-    void TSP();
+    std::pair<double, std::vector<City>> TSP();
+    void TSP_many();
 };
 #endif // MAINWINDOW_H
