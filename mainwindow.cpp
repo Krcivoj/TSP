@@ -69,6 +69,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->accuracy->setVisible(false);
     file.setFileName("");
 
+    ui->manyTest->setDisabled(true);
+
     scene = new QGraphicsScene(this);
 
     ui->graphArea->setScene(scene);
@@ -80,6 +82,10 @@ MainWindow::MainWindow(QWidget *parent)
     ui->progressBar->setMaximum(100);
     ui->progressBar->setValue(0);
     ui->progressBar->setVisible(false);
+    ui->progressBar_2->setVisible(false);
+
+    coef = ui->coeff->value();
+    flag = false;
 }
 
 MainWindow::~MainWindow()
@@ -93,6 +99,7 @@ void MainWindow::setupSignalsAndSlots()
     connect(ui->solve, &QPushButton::clicked, this, &MainWindow::solveClicked);
     connect(ui->manyTest, &QPushButton::clicked, this, &MainWindow::TSP_many);
     connect(this, SIGNAL(drawPath()), this, SLOT(drawingPath()));
+    connect(ui->coeff, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &MainWindow::drawCities);
 }
 
 void MainWindow::loadClicked()
@@ -115,7 +122,7 @@ void MainWindow::loadClicked()
         Ant::cities.clear();
         Ant::pheromone.clear();
         scene->clear();
-
+        coef = ui->coeff->value();
         while(!stream.atEnd()) {
             QString line = stream.readLine();
             QStringList podaci = line.split(","); //pazi je li ide ili ne razmak
@@ -125,10 +132,8 @@ void MainWindow::loadClicked()
             else {
                 val1 = podaci[0].toDouble();
                 val2 = podaci[1].toDouble();
-                Ant::cities.push_back( City(val1, val2));
-                double coef;
-                if(ui->bigChoice->checkState() == Qt::Checked) coef = 0.12;
-                else coef = 10;
+                //qDebug() << val1 << " " << val2;
+                Ant::cities.push_back( City(val1, val2));                
                 scene->addEllipse( (double) val1*coef-10, (double) val2*coef-10, 15, 15, QPen(Qt::green), QBrush(Qt::green));
             }
         }
@@ -147,23 +152,28 @@ void MainWindow::loadClicked()
         ui->bestKnown->setVisible(false);
         ui->bestLength->setVisible(false);
         ui->accuracy->setVisible(false);
+        ui->manyTest->setEnabled(true);
     }
 }
 
 void MainWindow::solveClicked()
 {
+   flag = true;
+   ui->progressBar_2->setVisible(false);
    ui->load->setEnabled(false);
    ui->solve->setEnabled(false);
    ui->solve->repaint();
-   ui->bigChoice->setEnabled(false);
+   ui->manyTest->setEnabled(false);
    TSP();
-   ui->bigChoice->setEnabled(true);
    ui->solve->setEnabled(true);
    ui->load->setEnabled(true);
+   ui->manyTest->setEnabled(true);
+   flag = false;
 }
 
 pair<double, vector<City>> MainWindow::TSP()
 {
+    coef = ui->coeff->value();
     Ant::pheromone.clear();
 
     ui->progressBar->setValue(0);
@@ -223,14 +233,10 @@ pair<double, vector<City>> MainWindow::TSP()
         }
     }
 
-    //qDebug() << bestLength;
-
     //za sad cu tu bacit drawing bestPatha da je ne moram slati kroz emit
-    double coef;
+    coef = ui->coeff->value();
     for(auto i = bestPath.begin(); next(i, 1) != bestPath.end(); i++)
         {
-            if(ui->bigChoice->checkState() == Qt::Checked) coef = 0.12;
-            else coef = 10;
             QLineF l = QLineF(i->x*coef, i->y*coef, next(i,1)->x*coef, next(i,1)->y*coef);
             QPen p = QPen(Qt::green,Qt::RoundCap);
             p.setWidthF(3);
@@ -241,8 +247,6 @@ pair<double, vector<City>> MainWindow::TSP()
                               QPen(Qt::green), QBrush(Qt::green));
         }
     //zatvaram ciklus
-    if(ui->bigChoice->checkState() == Qt::Checked) coef = 0.12;
-    else coef = 10;
     QLineF l = QLineF(bestPath.begin()->x*coef, bestPath.begin()->y*coef,
                       next(bestPath.end(),-1)->x*coef, next(bestPath.end(),-1)->y*coef);
     QPen p = QPen(Qt::green,Qt::RoundCap);
@@ -268,7 +272,17 @@ pair<double, vector<City>> MainWindow::TSP()
 
 void MainWindow::TSP_many()
 {
-    int N = 10;
+    ui->load->setEnabled(false);
+    ui->solve->setEnabled(false);
+    ui->manyTest->setEnabled(false);
+
+    int N = ui->numberTest->value();
+
+    ui->progressBar_2->setMinimum(0);
+    ui->progressBar_2->setMaximum(N);
+    ui->progressBar_2->setValue(0);
+    ui->progressBar_2->setVisible(true);
+
     double bestLength = DBL_MAX;
     double sum = 0;
     vector<City> bestPath;
@@ -280,11 +294,15 @@ void MainWindow::TSP_many()
 
     QString fileName = QFileDialog::getSaveFileName(this, "Save as file", ".", selfilter, &selfilter);
     if(fileName == ""){
+       set();
        return;
     }
     outFile.setFileName(fileName);
     if (!outFile.open(QIODevice::WriteOnly | QIODevice::Text))
-            return;
+    {
+        set();
+        return;
+    }
 
     QTextStream out(&outFile);
     out << name << '\n';
@@ -296,6 +314,7 @@ void MainWindow::TSP_many()
 
     for(int i = 0; i < N; i++)
     {
+
         pair<double, vector<City>> p = TSP();
         out << p.first << '\n';
         sum += p.first;
@@ -304,24 +323,28 @@ void MainWindow::TSP_many()
             bestLength = p.first;
             bestPath = p.second;
         }
-
+        ui->progressBar_2->setValue(i+1);
     }
     out << "Best found: " << bestLength << '\n';
     out << "Average: "<< sum/N << '\n';
     out << "Best known: "<< ui->bestKnown->text();
 
     outFile.close();
+    set();
+}
+void MainWindow::set(){
+    ui->load->setEnabled(true);
+    ui->solve->setEnabled(true);
+    ui->manyTest->setEnabled(true);
 }
 
 void MainWindow::drawingPath()
 {
+    coef = ui->coeff->value();
     scene->clear();
     for(int j = 0; j < (int) Ant::pheromone.size(); j++)
         for(int i = j+1; i < (int) Ant::pheromone.size(); i++)
         {
-            double coef;
-            if(ui->bigChoice->checkState() == Qt::Checked) coef = 0.12;
-            else coef = 10;
             if(ui->pherChoice->checkState() == Qt::Checked)
             {
                 QLineF l = QLineF(Ant::cities[i].x*coef, Ant::cities[i].y*coef, Ant::cities[j].x*coef, Ant::cities[j].y*coef);
@@ -335,6 +358,22 @@ void MainWindow::drawingPath()
                               QPen(Qt::green), QBrush(Qt::green));
         }
 
+    scene->update();
+    ui->graphArea->repaint();
+    qApp->processEvents();
+    update();
+}
+
+void MainWindow::drawCities()
+{
+    if(flag) return;
+    scene->clear();
+    coef = ui->coeff->value();
+    for(auto city : Ant::cities)
+    {
+        scene->addEllipse(city.x*coef-10, city.y*coef-10, 15, 15,
+                          QPen(Qt::green), QBrush(Qt::green));
+    }
     scene->update();
     ui->graphArea->repaint();
     qApp->processEvents();

@@ -23,6 +23,7 @@ private slots:
     void loadClicked();
     void solveClicked();
     void drawingPath();
+    void drawCities();
 
 signals:
     void drawPath();
@@ -35,8 +36,11 @@ private:
     Ui::MainWindow *ui;
     QFile file;
     QGraphicsScene *scene;
+    double coef;
+    bool flag;
 
     std::pair<double, std::vector<City>> TSP();
     void TSP_many();
+    void set();
 };
 #endif // MAINWINDOW_H
