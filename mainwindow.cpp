@@ -183,7 +183,7 @@ void MainWindow::TSP()
         vector<double> row;
         for(int j = 0; j < i; j++)
         {
-            row.push_back(m/C);
+            row.push_back(Q*m/C);
         }
         Ant::pheromone.push_back(row);
     }
