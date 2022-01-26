@@ -1,7 +1,7 @@
 poligon20.csv
 iterations: 2500
 alpha: 1
-beta: 5
+beta: 1
 Q: 100
 rho 0.5
 621.879
