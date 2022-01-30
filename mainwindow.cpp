@@ -150,6 +150,7 @@ void MainWindow::loadClicked()
 
         ui->solve->setEnabled(true);
         ui->bestKnown->setVisible(false);
+        ui->iterLabel->setVisible(false);
         ui->bestLength->setVisible(false);
         ui->accuracy->setVisible(false);
         ui->manyTest->setEnabled(true);
@@ -171,7 +172,7 @@ void MainWindow::solveClicked()
    flag = false;
 }
 
-pair<double, vector<City>> MainWindow::TSP()
+pair<pair<double,int>, vector<City>> MainWindow::TSP()
 {
     coef = ui->coeff->value();
     Ant::pheromone.clear();
@@ -182,6 +183,7 @@ pair<double, vector<City>> MainWindow::TSP()
     vector<Ant> ants;
     vector<City> bestPath;
     double bestLength = DBL_MAX;
+    int bestIteration = 0;
     int max_iterations =  ui->max_iterations_param->value();
     alpha = ui->alpha_param->value();
     beta_ = ui->beta_param->value();
@@ -225,6 +227,7 @@ pair<double, vector<City>> MainWindow::TSP()
             {
                 bestLength = ant.pathLength();
                 bestPath = ant.visited;
+                bestIteration = i;
             }
         }
         Ant::evaporatePheromone();
@@ -263,11 +266,14 @@ pair<double, vector<City>> MainWindow::TSP()
     ui->bestLength->setVisible(true);
     ui->bestLength->setText(QString::number(bestLength));
     ui->bestKnown->setVisible(true);
+    ui->iterLabel->setVisible(true);
+    ui->iterLabel->setText(QString::number(bestIteration));
     ui->accuracy->setVisible(true);
     float acc = (ui->bestKnown->text().toFloat() < bestLength) ?
                 ui->bestKnown->text().toFloat()/bestLength : bestLength/ ui->bestKnown->text().toFloat();
     ui->accuracy->setText(QString::number(acc));
-    return pair(bestLength, bestPath);
+    pair<double, int> best = pair(bestLength, bestIteration);
+    return pair(best, bestPath);
 }
 
 void MainWindow::TSP_many()
@@ -315,12 +321,13 @@ void MainWindow::TSP_many()
     for(int i = 0; i < N; i++)
     {
 
-        pair<double, vector<City>> p = TSP();
-        out << p.first << '\n';
-        sum += p.first;
-        if(p.first < bestLength)
+        pair<pair<double,int>, vector<City>> p = TSP();
+        out << p.first.first << "\t";
+        out << " iteration: " << p.first.second << '\n';
+        sum += p.first.first;
+        if(p.first.first < bestLength)
         {
-            bestLength = p.first;
+            bestLength = p.first.first;
             bestPath = p.second;
         }
         ui->progressBar_2->setValue(i+1);

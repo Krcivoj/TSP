@@ -39,7 +39,7 @@ private:
     double coef;
     bool flag;
 
-    std::pair<double, std::vector<City>> TSP();
+    std::pair<std::pair<double,int>, std::vector<City>> TSP();
     void TSP_many();
     void set();
 };
