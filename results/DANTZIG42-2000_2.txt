@@ -1,0 +1,19 @@
+DANTZIG42.csv
+iterations: 2000
+alpha: 1
+beta: 1
+Q: 100
+rho 0.5
+703.596	 iteration: 1120
+705.486	 iteration: 1158
+703.445	 iteration: 169
+704.691	 iteration: 107
+694.369	 iteration: 1013
+704.729	 iteration: 229
+689.301	 iteration: 235
+712.667	 iteration: 1398
+712.387	 iteration: 892
+691.564	 iteration: 11
+Best found: 689.301
+Average: 702.223
+Best known: 699

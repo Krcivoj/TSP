@@ -1,0 +1,19 @@
+Oliver30.csv
+iterations: 2250
+alpha: 1
+beta: 5
+Q: 100
+rho 0.5
+425.82	 iteration: 2034
+425.82	 iteration: 1215
+426.544	 iteration: 9
+426.544	 iteration: 1554
+425.82	 iteration: 9
+426.6	 iteration: 9
+424.692	 iteration: 933
+432.026	 iteration: 2200
+425.82	 iteration: 1715
+423.912	 iteration: 153
+Best found: 423.912
+Average: 426.36
+Best known: 423.741
