@@ -1,0 +1,19 @@
+Eil101.csv
+iterations: 500
+alpha: 1
+beta: 5
+Q: 100
+rho 0.5
+698.85	 iteration: 353
+694.326	 iteration: 319
+692.189	 iteration: 119
+687.195	 iteration: 433
+689.708	 iteration: 193
+681.041	 iteration: 270
+704.503	 iteration: 40
+697.96	 iteration: 476
+685.237	 iteration: 426
+687.815	 iteration: 380
+Best found: 681.041
+Average: 691.883
+Best known: 629
