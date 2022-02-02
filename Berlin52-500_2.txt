@@ -1,0 +1,19 @@
+Berlin52.csv
+iterations: 500
+alpha: 1
+beta: 1
+Q: 100
+rho 0.5
+7576.25	 iteration: 116
+7634.6	 iteration: 331
+7659.25	 iteration: 131
+7606.96	 iteration: 339
+7549.29	 iteration: 84
+7590.56	 iteration: 51
+7544.66	 iteration: 287
+7659.25	 iteration: 347
+7637.46	 iteration: 478
+7670.29	 iteration: 289
+Best found: 7544.66
+Average: 7612.86
+Best known: 7542
